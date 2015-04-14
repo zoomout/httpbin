@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="Parallel">
+
+    <test name="Parallel tests" parallel="methods" thread-count="4">
+        <classes>
+            <class name="HttpBinGetTest" />
+            <class name="HttpBinPostTest" />
+            <class name="HttpBinXmlTest" />
+            <class name="HttpBinResponseHeadersTest" />
+        </classes>
+    </test>
+</suite>
