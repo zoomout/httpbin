@@ -60,8 +60,8 @@ public class HttpBinGetTest extends HttpBinGeneral{
     }
 
     @Test(groups = "group1")
-    public void testGetArgs() {
-        LOG.info("Test: testGetArgs");
+    public void testGetArgs1() {
+        LOG.info("Test: testGetArgs1");
 
         Map<String, String> args = new HashMap<String, String>();
         args.put("hello1", "world1");
@@ -77,7 +77,58 @@ public class HttpBinGetTest extends HttpBinGeneral{
 
         JSONObject expectedJsonArgs = new JSONObject(new Gson().toJson(args));
 
-        assertThat(expectedJsonArgs.toString()).as("JSON body args").isEqualTo(responseJsonArgs.toString());
+        assertThat(responseJsonArgs.toString()).as("JSON body args").isEqualTo(expectedJsonArgs.toString());
+    }
+
+    @Test(groups = "group1")
+    public void testGetArgs2() {
+        LOG.info("Test: testGetArgs2");
+
+        Map<String, String> args = new HashMap<String, String>();
+        args.put("hello1", "world1");
+        args.put("hello2", "world1");
+
+        String argsUrl = convertArgsToString(args);
+
+        HttpResponse responseGet = HttpRequest
+                .get(getUrl + argsUrl)
+                .sendAndGetResponse();
+
+        JSONObject responseJsonArgs = getJSONObjectArgs(new JSONObject(responseGet.getResponseBody()));
+
+        JSONObject expectedJsonArgs = new JSONObject(new Gson().toJson(args));
+
+        assertThat(responseJsonArgs.toString()).as("JSON body args").isEqualTo(expectedJsonArgs.toString());
+    }
+
+    @Test(groups = "group1")
+    public void testGetArgs3() {
+        LOG.info("Test: testGetArgs3");
+
+        HttpResponse responseGet = HttpRequest
+                .get(getUrl + "?hello1=world1&hello1=world2")
+                .sendAndGetResponse();
+
+        JSONObject responseJsonArgs = getJSONObjectArgs(new JSONObject(responseGet.getResponseBody()));
+
+        String expectedJsonArgs = "{\"hello1\":[\"world1\",\"world2\"]}";
+
+        assertThat(responseJsonArgs.toString()).as("JSON body args").isEqualTo(expectedJsonArgs);
+    }
+
+    @Test(groups = "group1")
+    public void testGetArgs4() {
+        LOG.info("Test: testGetArgs4");
+
+        HttpResponse responseGet = HttpRequest
+                .get(getUrl + "?hello1=world1&hello1=world1")
+                .sendAndGetResponse();
+
+        JSONObject responseJsonArgs = getJSONObjectArgs(new JSONObject(responseGet.getResponseBody()));
+
+        String expectedJsonArgs = "{\"hello1\":[\"world1\",\"world1\"]}";
+
+        assertThat(responseJsonArgs.toString()).as("JSON body args").isEqualTo(expectedJsonArgs);
     }
 
     @Test(groups = "group1")

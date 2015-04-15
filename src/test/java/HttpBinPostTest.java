@@ -72,8 +72,8 @@ public class HttpBinPostTest extends HttpBinGeneral{
     }
 
     @Test(groups = "group1")
-    public void testPostJson() {
-        LOG.info("Test: testPostJson");
+    public void testPostJson1() {
+        LOG.info("Test: testPostJson1");
 
 
         Map<String, String> jsonBodyContent = new HashMap<String, String>();
@@ -94,6 +94,73 @@ public class HttpBinPostTest extends HttpBinGeneral{
 
         String data = (String) responseJson.get("data");
         assertThat(data).as("Data in response body").isEqualTo(requestJsonBody.toString());
+    }
+
+    @Test(groups = "group1")
+    public void testPostJson2() {
+        LOG.info("Test: testPostJson2");
+
+
+        Map<String, String> jsonBodyContent = new HashMap<String, String>();
+        jsonBodyContent.put("jsonKey1", "jsonValue1");
+        jsonBodyContent.put("jsonKey2", "jsonValue1");
+        JSONObject requestJsonBody = new JSONObject(new Gson().toJson(jsonBodyContent));
+
+        HttpResponse responsePost = HttpRequest
+                .post(postUrl)
+                .addHeader("Content-Type", HttpRequest.CONTENT_TYPE.APPLICATION_JSON.toString())
+                .addBody(requestJsonBody.toString())
+                .sendAndGetResponse();
+
+        JSONObject responseJson = new JSONObject(responsePost.getResponseBody());
+
+        JSONObject responseJsonJson = getJSONObjectJson(responseJson);
+        assertThat(responseJsonJson.toString()).as("Json in response body").isEqualTo(requestJsonBody.toString());
+
+        String data = (String) responseJson.get("data");
+        assertThat(data).as("Data in response body").isEqualTo(requestJsonBody.toString());
+    }
+
+    @Test(groups = "group1")
+    public void testPostJson3() {
+        LOG.info("Test: testPostJson3");
+
+        HttpResponse responsePost = HttpRequest
+                .post(postUrl)
+                .addHeader("Content-Type", HttpRequest.CONTENT_TYPE.APPLICATION_JSON.toString())
+                .addBody("{\"jsonKey1\":\"jsonValue2\",\n" +
+                        "  \"jsonKey1\":\"jsonValue1\"}")
+                .sendAndGetResponse();
+
+        JSONObject responseJson = new JSONObject(responsePost.getResponseBody());
+
+        JSONObject responseJsonJson = getJSONObjectJson(responseJson);
+        assertThat(responseJsonJson.toString()).as("Json in response body").isEqualTo("{\"jsonKey1\":\"jsonValue1\"}");
+
+        String data = (String) responseJson.get("data");
+        assertThat(data).as("Data in response body").isEqualTo("{\"jsonKey1\":\"jsonValue2\",\n" +
+                "  \"jsonKey1\":\"jsonValue1\"}");
+    }
+
+    @Test(groups = "group1")
+    public void testPostArgs() {
+        LOG.info("Test: testPostArgs");
+
+        Map<String, String> args = new HashMap<String, String>();
+        args.put("hello1", "world1");
+        args.put("hello2", "world2");
+
+        String argsUrl = convertArgsToString(args);
+
+        HttpResponse responsePost = HttpRequest
+                .post(postUrl + argsUrl)
+                .sendAndGetResponse();
+
+        JSONObject responseJsonArgs = getJSONObjectArgs(new JSONObject(responsePost.getResponseBody()));
+
+        JSONObject expectedJsonArgs = new JSONObject(new Gson().toJson(args));
+
+        assertThat(responseJsonArgs.toString()).as("JSON body args").isEqualTo(expectedJsonArgs.toString());
     }
 
     @Test(groups = "group1")
