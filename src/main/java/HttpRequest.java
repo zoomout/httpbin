@@ -1,3 +1,6 @@
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -7,11 +10,11 @@ import java.net.ProtocolException;
 import java.net.URL;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Logger;
 
 public class HttpRequest {
 
-    private static Logger LOG = Logger.getLogger("HttpRequest");
+    private static Logger LOG = LoggerFactory.getLogger(HttpRequest.class.getSimpleName());
+
     private HttpURLConnection httpURLConnection;
     private String url;
     private HTTP_METHOD method;
@@ -64,7 +67,7 @@ public class HttpRequest {
 
     public HttpRequest addBody(final String body) {
         if (this.method.equals(HTTP_METHOD.GET)) {
-            LOG.warning(String.format("Body is not allowed in method: %s", HTTP_METHOD.GET));
+            LOG.error(String.format("Body is not allowed in method: %s", HTTP_METHOD.GET));
         }
         this.httpURLConnection.setDoOutput(true);
         DataOutputStream wr;

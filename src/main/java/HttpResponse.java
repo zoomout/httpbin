@@ -16,6 +16,10 @@ public class HttpResponse {
         this.headerFields = headerFields;
     }
 
+    public Map<String, List<String>> getHeaderFields() {
+        return headerFields;
+    }
+
     public String getRequestMethod() {
         return requestMethod;
     }
