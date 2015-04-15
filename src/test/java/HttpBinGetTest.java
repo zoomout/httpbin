@@ -21,6 +21,7 @@ public class HttpBinGetTest extends HttpBinGeneral{
         LOG.info("Test: testGetDefaultBodyResponse");
         HttpResponse responseGet = HttpRequest
                 .get(getUrl)
+                .addHeader("User-Agent","Mozilla/5.0")
                 .sendAndGetResponse();
 
         String requestMethod = responseGet.getRequestMethod();
@@ -51,7 +52,7 @@ public class HttpBinGetTest extends HttpBinGeneral{
         String host = (String) responseJsonHeaders.get("Host");
 
         assertThat(accept).as("Response body header Accept").isEqualTo("text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2");
-        assertThat(userAgent).as("Response body header User-Agent").isEqualTo("Java/1.8.0_25");
+        assertThat(userAgent).as("Response body header User-Agent").isEqualTo("Mozilla/5.0");
         assertThat(host).as("Response body header Host").isEqualTo("www.httpbin.org");
 
         String url = (String) responseJson.get("url");
