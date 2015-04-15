@@ -84,26 +84,43 @@ public class HttpRequest {
 
     public HttpResponse sendAndGetResponse() {
         HttpResponse httpResponse = null;
+        BufferedReader in = null;
         try {
             int responseCode = this.httpURLConnection.getResponseCode();
+
             String responseMessage = this.httpURLConnection.getResponseMessage();
             String requestMethod = this.httpURLConnection.getRequestMethod();
             Map<String, List<String>> headerFields = this.httpURLConnection.getHeaderFields();
 
-            BufferedReader in = new BufferedReader(
-                    new InputStreamReader(this.httpURLConnection.getInputStream()));
-            String inputLine;
-            StringBuffer response = new StringBuffer();
+            String responseBody = null;
+            if (!(responseCode == 404 || responseCode == 400 || responseCode == 405)) {
+                in = new BufferedReader(
+                        new InputStreamReader(this.httpURLConnection.getInputStream()));
+                String inputLine;
+                StringBuffer response = new StringBuffer();
 
-            while ((inputLine = in.readLine()) != null) {
-                response.append(inputLine);
+                while ((inputLine = in.readLine()) != null) {
+                    response.append(inputLine);
+                }
+                in.close();
+                responseBody = response.toString();
             }
-            in.close();
-            String responseBody = response.toString();
+
 
             httpResponse = new HttpResponse(responseCode, responseMessage, responseBody, requestMethod, headerFields);
         } catch (Exception e) {
             e.printStackTrace();
+        } finally {
+            if (in != null) {
+                try {
+                    in.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (this.httpURLConnection != null) {
+                this.httpURLConnection.disconnect();
+            }
         }
 
         return httpResponse;

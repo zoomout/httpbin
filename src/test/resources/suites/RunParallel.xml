@@ -2,7 +2,7 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
 <suite name="Parallel">
 
-    <test name="Parallel tests" parallel="methods" thread-count="4">
+    <test name="Parallel tests" parallel="methods" thread-count="100">
         <classes>
             <class name="HttpBinGetTest" />
             <class name="HttpBinPostTest" />

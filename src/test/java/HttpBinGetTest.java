@@ -1,23 +1,24 @@
+import com.google.gson.Gson;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import static org.fest.assertions.api.Assertions.assertThat;
 
-public class HttpBinGetTest {
+public class HttpBinGetTest extends HttpBinGeneral{
 
     private static final String getUrl = "http://www.httpbin.org/get";
     private static Logger LOG = LoggerFactory.getLogger(HttpBinGetTest.class.getSimpleName());
 
 
     @Test(groups = "group1")
-    public void testGetDefault() {
-        LOG.info("Test: testGetDefault");
+    public void testGetDefaultBodyResponse() {
+        LOG.info("Test: testGetDefaultBodyResponse");
         HttpResponse responseGet = HttpRequest
                 .get(getUrl)
                 .sendAndGetResponse();
@@ -25,8 +26,7 @@ public class HttpBinGetTest {
         String requestMethod = responseGet.getRequestMethod();
         int responseCode = responseGet.getResponseCode();
         String responseMessage = responseGet.getResponseMessage();
-        String responseBody = responseGet.getResponseBody();
-        JSONObject responseJson = new JSONObject(responseBody);
+        JSONObject responseJson = new JSONObject(responseGet.getResponseBody());
         Map<String, List<String>> headerFields = responseGet.getHeaderFields();
 
         assertThat(requestMethod).as("Request method").isEqualTo("GET");
@@ -41,18 +41,11 @@ public class HttpBinGetTest {
         assertThat(headerFields.get("Content-Type").get(0)).as("Header - Content-Type").isEqualTo("application/json");
 
 
-        JSONObject responseJsonArgs;
-        if (((JSONObject) responseJson.get("args")).length() == 0) {
-            responseJsonArgs = null;
-        } else {
-            responseJsonArgs = (JSONObject) responseJson.get("args");
-        }
+        JSONObject responseJsonArgs = getJSONObjectArgs(responseJson);
         assertThat(responseJsonArgs).as("Response JSON Args").isNull();
 
-        String url = (String) responseJson.get("url");
-        assertThat(url).as("Response url").isEqualTo(getUrl);
+        JSONObject responseJsonHeaders = getJSONObjectHeaders(responseJson);
 
-        JSONObject responseJsonHeaders = (JSONObject) responseJson.get("headers");
         String accept = (String) responseJsonHeaders.get("Accept");
         String userAgent = (String) responseJsonHeaders.get("User-Agent");
         String host = (String) responseJsonHeaders.get("Host");
@@ -60,11 +53,83 @@ public class HttpBinGetTest {
         assertThat(accept).as("Response body header Accept").isEqualTo("text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2");
         assertThat(userAgent).as("Response body header User-Agent").isEqualTo("Java/1.8.0_25");
         assertThat(host).as("Response body header Host").isEqualTo("www.httpbin.org");
+
+        String url = (String) responseJson.get("url");
+        assertThat(url).as("Response body url").isEqualTo(getUrl);
     }
 
     @Test(groups = "group1")
-    public void testGetDefault2() {
-        LOG.info("Test: testGetDefault2");
+    public void testGetArgs() {
+        LOG.info("Test: testGetArgs");
 
+        Map<String, String> args = new HashMap<String, String>();
+        args.put("hello1", "world1");
+        args.put("hello2", "world2");
+
+        String argsUrl = convertArgsToString(args);
+
+        HttpResponse responseGet = HttpRequest
+                .get(getUrl + argsUrl)
+                .sendAndGetResponse();
+
+        JSONObject responseJsonArgs = getJSONObjectArgs(new JSONObject(responseGet.getResponseBody()));
+
+        JSONObject expectedJsonArgs = new JSONObject(new Gson().toJson(args));
+
+        assertThat(expectedJsonArgs.toString()).as("JSON body args").isEqualTo(responseJsonArgs.toString());
+    }
+
+    @Test(groups = "group1")
+    public void testGetInvalidUrl() {
+        LOG.info("Test: testGetInvalidUrl");
+
+        HttpResponse responseGet = HttpRequest
+                .get(getUrl + "/")
+                .sendAndGetResponse();
+
+        int responseCode = responseGet.getResponseCode();
+        String responseMessage = responseGet.getResponseMessage();
+
+        assertThat(responseCode).as("Response code").isEqualTo(404);
+        assertThat(responseMessage).as("Response message").isEqualTo("NOT FOUND");
+    }
+
+    @Test(groups = "group1")
+    public void testGetHeaders() {
+        LOG.info("Test: testGetHeaders");
+
+        Map<String, String> headers = new HashMap<String, String>();
+        headers.put("Hello1", "World1");
+        headers.put("Hello2", "World2");
+
+        HttpResponse responseGet = HttpRequest
+                .get(getUrl)
+                .addHeader("Hello1", headers.get("Hello1"))
+                .addHeader("Hello2", headers.get("Hello2"))
+                .sendAndGetResponse();
+
+        JSONObject responseJson = new JSONObject(responseGet.getResponseBody());
+        JSONObject responseJsonHeaders = getJSONObjectHeaders(responseJson);
+
+        assertThat(responseJsonHeaders.has("Hello1")).as("Header - Hello1 is present").isTrue();
+        assertThat(responseJsonHeaders.has("Hello2")).as("Header - Hello2 is present").isTrue();
+
+        assertThat(responseJsonHeaders.get("Hello1")).as("Header - Hello1").isEqualTo(headers.get("Hello1"));
+        assertThat(responseJsonHeaders.get("Hello2")).as("Header - Hello2").isEqualTo(headers.get("Hello2"));
+    }
+
+    @Test(groups = "group1")
+    public void testGetInvalidMethod() {
+        LOG.info("Test: testGetInvalidMethod");
+
+        HttpResponse responseGet = HttpRequest
+                .post(getUrl)
+                .sendAndGetResponse();
+
+        int responseCode = responseGet.getResponseCode();
+        String responseMessage = responseGet.getResponseMessage();
+
+        assertThat(responseCode).as("Response code").isEqualTo(405);
+        assertThat(responseMessage).as("Response message").isEqualTo("METHOD NOT ALLOWED");
     }
 }
