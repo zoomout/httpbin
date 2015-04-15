@@ -4,7 +4,7 @@ import java.util.Map;
 
 public abstract class HttpBinGeneral {
 
-    protected String convertArgsToString(Map<String, String> args) {
+    protected final String convertArgsToString(final Map<String, String> args) {
         StringBuffer sb = new StringBuffer("?");
 
         Object[] values = args.values().toArray();
@@ -22,7 +22,7 @@ public abstract class HttpBinGeneral {
         return sb.toString();
     }
 
-    protected JSONObject getJSONObjectHeaders(JSONObject jsonObject) {
+    protected final JSONObject getJSONObjectHeaders(final JSONObject jsonObject) {
         JSONObject responseJsonHeaders;
         if (((JSONObject) jsonObject.get("headers")).length() == 0) {
             responseJsonHeaders = null;
@@ -32,7 +32,7 @@ public abstract class HttpBinGeneral {
         return responseJsonHeaders;
     }
 
-    protected JSONObject getJSONObjectArgs(JSONObject jsonObject) {
+    protected final JSONObject getJSONObjectArgs(final JSONObject jsonObject) {
         JSONObject responseJsonArgs;
         if (((JSONObject) jsonObject.get("args")).length() == 0) {
             responseJsonArgs = null;
@@ -42,7 +42,7 @@ public abstract class HttpBinGeneral {
         return responseJsonArgs;
     }
 
-    protected JSONObject getJSONObjectJson(JSONObject jsonObject) {
+    protected final JSONObject getJSONObjectJson(final JSONObject jsonObject) {
         JSONObject responseJsonJson;
 
         if ((jsonObject.get("json").toString().equals("null")) || (((JSONObject) jsonObject.get("json")).length() == 0)) {
@@ -53,7 +53,7 @@ public abstract class HttpBinGeneral {
         return responseJsonJson;
     }
 
-    protected JSONObject getJSONObjectForm(JSONObject jsonObject) {
+    protected final JSONObject getJSONObjectForm(final JSONObject jsonObject) {
         JSONObject responseJsonForm;
         if (((JSONObject) jsonObject.get("form")).length() == 0) {
             responseJsonForm = null;
@@ -63,7 +63,7 @@ public abstract class HttpBinGeneral {
         return responseJsonForm;
     }
 
-    protected JSONObject getJSONObjectFiles(JSONObject jsonObject) {
+    protected final JSONObject getJSONObjectFiles(final JSONObject jsonObject) {
         JSONObject responseJsonFiles;
         if (((JSONObject) jsonObject.get("files")).length() == 0) {
             responseJsonFiles = null;

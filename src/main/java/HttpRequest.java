@@ -13,13 +13,13 @@ import java.util.Map;
 
 public class HttpRequest {
 
-    private static Logger LOG = LoggerFactory.getLogger(HttpRequest.class.getSimpleName());
+    private static final  Logger LOG = LoggerFactory.getLogger(HttpRequest.class.getSimpleName());
 
     private HttpURLConnection httpURLConnection;
     private String url;
     private HTTP_METHOD method;
 
-    public HttpRequest(String stringUrl, HTTP_METHOD method) {
+    public HttpRequest(final String stringUrl, final HTTP_METHOD method) {
         try {
             this.url = stringUrl;
             URL url = new URL(stringUrl);
@@ -41,11 +41,11 @@ public class HttpRequest {
         return new HttpRequest(url, HTTP_METHOD.POST);
     }
 
-    public HTTP_METHOD getMethod() {
+    public final HTTP_METHOD getMethod() {
         return this.method;
     }
 
-    public String getUrl() {
+    public final String getUrl() {
         return this.url;
     }
 
@@ -60,12 +60,12 @@ public class HttpRequest {
     }
 
 
-    public HttpRequest addHeader(final String key, final String value) {
+    public final HttpRequest addHeader(final String key, final String value) {
         this.httpURLConnection.setRequestProperty(key, value);
         return this;
     }
 
-    public HttpRequest addBody(final String body) {
+    public final HttpRequest addBody(final String body) {
         if (this.method.equals(HTTP_METHOD.GET)) {
             LOG.error(String.format("Body is not allowed in method: %s", HTTP_METHOD.GET));
         }
@@ -82,7 +82,7 @@ public class HttpRequest {
         return this;
     }
 
-    public HttpResponse sendAndGetResponse() {
+    public final HttpResponse sendAndGetResponse() {
         HttpResponse httpResponse = null;
         BufferedReader in = null;
         try {

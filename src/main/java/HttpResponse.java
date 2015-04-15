@@ -8,7 +8,8 @@ public class HttpResponse {
     private String requestMethod;
     private Map<String, List<String>> headerFields;
 
-    public HttpResponse(int responseCode, String responseMessage, String responseBody, String requestMethod, Map<String, List<String>> headerFields) {
+    public HttpResponse(final int responseCode, final String responseMessage, final String responseBody,
+                        final String requestMethod, final Map<String, List<String>> headerFields) {
         this.responseCode = responseCode;
         this.responseMessage = responseMessage;
         this.responseBody = responseBody;
@@ -16,23 +17,23 @@ public class HttpResponse {
         this.headerFields = headerFields;
     }
 
-    public Map<String, List<String>> getHeaderFields() {
+    public final Map<String, List<String>> getHeaderFields() {
         return headerFields;
     }
 
-    public String getRequestMethod() {
+    public final String getRequestMethod() {
         return requestMethod;
     }
 
-    public String getResponseMessage() {
+    public final String getResponseMessage() {
         return responseMessage;
     }
 
-    public int getResponseCode() {
+    public final int getResponseCode() {
         return responseCode;
     }
 
-    public String getResponseBody() {
+    public final String getResponseBody() {
         return responseBody;
     }
 }
