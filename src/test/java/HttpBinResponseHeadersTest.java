@@ -108,8 +108,8 @@ public class HttpBinResponseHeadersTest extends HttpBinGeneral {
         LOG.info("Test: testResponseHeadersInParameters3");
 
         Map<String, String> args = new HashMap<String, String>();
-        args.put("hello1", "world1");
-        args.put("hello2", "world2");
+        args.put("hello1", "world12");
+        args.put("hello2", "world12");
 
         String argsUrl = convertArgsToString(args);
 
@@ -124,19 +124,13 @@ public class HttpBinResponseHeadersTest extends HttpBinGeneral {
         assertThat(responseCode).as("Response code").isEqualTo(200);
         assertThat(responseMessage).as("Response message").isEqualTo("OK");
 
-        assertThat(headerFields.get("hello1").get(0)).as("Header - hello1").isEqualTo("world1");
-        assertThat(headerFields.get("hello2").get(0)).as("Header - hello2").isEqualTo("world2");
+        assertThat(headerFields.get("hello1").get(0)).as("Header - hello1").isEqualTo("world12");
+        assertThat(headerFields.get("hello2").get(0)).as("Header - hello2").isEqualTo("world12");
 
         JSONObject responseJson = new JSONObject(responseGet.getResponseBody());
 
-        String hello1 = null;
-        String hello2 = null;
-        try {
-            hello1 = (String) responseJson.get("hello1");
-            hello2 = (String) responseJson.get("hello2");
-        } catch (JSONException e) {
-            fail("!!!Bug was found!!! - Field isn't present in response body: " + e.getMessage());
-        }
+        String hello1 = (String) responseJson.get("hello1");
+        String hello2 = (String) responseJson.get("hello2");
 
         assertThat(hello1).as("Body - hello1").isEqualTo(args.get("hello1"));
         assertThat(hello2).as("Body - hello2").isEqualTo(args.get("hello2"));
@@ -164,39 +158,6 @@ public class HttpBinResponseHeadersTest extends HttpBinGeneral {
         JSONArray jsonArray = responseJson.getJSONArray("hello1");
 
         assertThat(jsonArray.toString()).as("Body - hello1").isEqualTo("[\"world1\",\"world2\"]");
-    }
-
-    @Test(groups = "group2")
-    public void testResponseHeadersInParameters5() {
-        LOG.info("Test: testResponseHeadersInParameters5");
-
-        Map<String, String> args = new HashMap<String, String>();
-        args.put("hello1", "world12");
-        args.put("hello2", "world12");
-
-        String argsUrl = convertArgsToString(args);
-
-        HttpResponse responseGet = HttpRequest
-                .get(responseHeadersUrl + argsUrl)
-                .sendAndGetResponse();
-
-        int responseCode = responseGet.getResponseCode();
-        String responseMessage = responseGet.getResponseMessage();
-        Map<String, List<String>> headerFields = responseGet.getHeaderFields();
-
-        assertThat(responseCode).as("Response code").isEqualTo(200);
-        assertThat(responseMessage).as("Response message").isEqualTo("OK");
-
-        assertThat(headerFields.get("hello1").get(0)).as("Header - hello1").isEqualTo("world12");
-        assertThat(headerFields.get("hello2").get(0)).as("Header - hello2").isEqualTo("world12");
-
-        JSONObject responseJson = new JSONObject(responseGet.getResponseBody());
-
-        String hello1 = (String) responseJson.get("hello1");
-        String hello2 = (String) responseJson.get("hello2");
-
-        assertThat(hello1).as("Body - hello1").isEqualTo(args.get("hello1"));
-        assertThat(hello2).as("Body - hello2").isEqualTo(args.get("hello2"));
     }
 
     @Test(groups = "group1")
