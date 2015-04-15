@@ -102,11 +102,8 @@ public class HttpRequest {
                 while ((inputLine = in.readLine()) != null) {
                     response.append(inputLine);
                 }
-                in.close();
                 responseBody = response.toString();
             }
-
-
             httpResponse = new HttpResponse(responseCode, responseMessage, responseBody, requestMethod, headerFields);
         } catch (Exception e) {
             e.printStackTrace();
@@ -122,7 +119,6 @@ public class HttpRequest {
                 this.httpURLConnection.disconnect();
             }
         }
-
         return httpResponse;
     }
 
