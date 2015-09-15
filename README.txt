@@ -6,7 +6,5 @@ mvn clean compile test -Dsuite=RunParallel
 
 making change no4
 making change no7 master change
-making change no5
-making change no71
 making change no6
 making change no7 master change
