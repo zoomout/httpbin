@@ -38,7 +38,7 @@ public class HttpBinGetTest extends HttpBinGeneral{
         assertThat(headerFields.get("Access-Control-Allow-Origin").get(0)).as("Header - Access-Control-Allow-Origin").isEqualTo("*");
         assertThat(headerFields.get("Access-Control-Allow-Credentials").get(0)).as("Header - Access-Control-Allow-Credentials").isEqualTo("true");
         assertThat(headerFields.get("Connection").get(0)).as("Header - Connection").isEqualTo("keep-alive");
-        assertThat(headerFields.get("Content-Length").get(0)).as("Header - Content-Length").isEqualTo("245");
+        assertThat(headerFields.get("Content-Length").get(0)).as("Header - Content-Length").isEqualTo("244");
         assertThat(headerFields.get("Content-Type").get(0)).as("Header - Content-Type").isEqualTo("application/json");
 
 
