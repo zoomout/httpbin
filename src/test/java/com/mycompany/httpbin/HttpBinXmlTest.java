@@ -1,3 +1,5 @@
+package com.mycompany.httpbin;
+
 import org.slf4j.LoggerFactory;
 import org.testng.annotations.Test;
 

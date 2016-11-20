@@ -1,3 +1,5 @@
+package com.mycompany.httpbin;
+
 import com.google.gson.Gson;
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -10,7 +12,7 @@ import java.util.Map;
 
 import static org.fest.assertions.api.Assertions.assertThat;
 
-public class HttpBinGetTest extends HttpBinGeneral{
+public class HttpBinGetTest extends HttpBinGeneral {
 
     private static final String getUrl = "http://www.httpbin.org/get";
     private static Logger LOG = LoggerFactory.getLogger(HttpBinGetTest.class.getSimpleName());

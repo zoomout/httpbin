@@ -1,3 +1,5 @@
+package com.mycompany.httpbin;
+
 import org.json.JSONObject;
 
 import java.util.Map;

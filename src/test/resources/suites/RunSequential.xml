@@ -4,10 +4,10 @@
 
     <test name="Sequential tests" parallel="false">
         <classes>
-            <class name="HttpBinGetTest" />
-            <class name="HttpBinPostTest" />
-            <class name="HttpBinXmlTest" />
-            <class name="HttpBinResponseHeadersTest" />
+            <class name="com.mycompany.httpbin.HttpBinGetTest" />
+            <class name="com.mycompany.httpbin.HttpBinPostTest" />
+            <class name="com.mycompany.httpbin.HttpBinXmlTest" />
+            <class name="com.mycompany.httpbin.HttpBinResponseHeadersTest" />
         </classes>
     </test>
 </suite>
