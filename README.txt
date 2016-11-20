@@ -1,5 +1,5 @@
 To run sequential:
-mvn clean compile test -Dsuite=RunSequential
+mvn clean test -Dsuite=RunSequential
 
 To run in parallel:
-mvn clean compile test -Dsuite=RunParallel
+mvn clean test -Dsuite=RunParallel
